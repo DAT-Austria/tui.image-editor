@@ -49283,7 +49283,7 @@ var ImageTracer = /*#__PURE__*/function () {
             underline = _this12$ui$text.underline;
         var fontFamily = 'Noto Sans';
 
-        _this12.addText('Double Click', {
+        _this12.addText('Vorschaden', {
           position: pos.originPosition,
           styles: {
             fill: fill,
