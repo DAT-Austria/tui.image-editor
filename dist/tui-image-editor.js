@@ -39923,9 +39923,9 @@ var rejectMessages = {
  */
 
 var defaultIconPath = {
-  'icon-arrow': 'M40 12V0l24 24-24 24V36H0V12h40z',
-  'icon-arrow-2': 'M49,32 H3 V22 h46 l-18,-18 h12 l23,23 L43,50 h-12 l18,-18  z ',
-  'icon-arrow-3': 'M43.349998,27 L17.354,53 H1.949999 l25.996,-26 L1.949999,1 h15.404 L43.349998,27  z ',
+  'icon-arrow': 'M 58 0 V 0 l 0 35 l 0 1 V 38 H 0 V 0 h 40 z',
+  'icon-arrow-2': 'M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0',
+  'icon-arrow-3': 'M 31 0 l 0 0 l 31 44 l -37 0 V 44 H 0 V 44 h 0 z',
   'icon-star': 'M35,54.557999 l-19.912001,10.468 l3.804,-22.172001 l-16.108,-15.7 l22.26,-3.236 L35,3.746 l9.956,20.172001 l22.26,3.236 l-16.108,15.7 l3.804,22.172001  z ',
   'icon-star-2': 'M17,31.212 l-7.194,4.08 l-4.728,-6.83 l-8.234,0.524 l-1.328,-8.226 l-7.644,-3.14 l2.338,-7.992 l-5.54,-6.18 l5.54,-6.176 l-2.338,-7.994 l7.644,-3.138 l1.328,-8.226 l8.234,0.522 l4.728,-6.83 L17,-24.312 l7.194,-4.08 l4.728,6.83 l8.234,-0.522 l1.328,8.226 l7.644,3.14 l-2.338,7.992 l5.54,6.178 l-5.54,6.178 l2.338,7.992 l-7.644,3.14 l-1.328,8.226 l-8.234,-0.524 l-4.728,6.83  z ',
   'icon-polygon': 'M3,31 L19,3 h32 l16,28 l-16,28 H19  z ',
@@ -42735,7 +42735,22 @@ var Submenu = /*#__PURE__*/function () {
 
   }, {
     key: "changeStartMode",
-    value: function changeStartMode() {}
+    value: function changeStartMode() {
+      /*
+      this.actions.stopDrawingMode();
+      var iconType = 'icon-arrow';
+      var iconColor = this._els.iconColorpicker.color;
+      this.actions.discardSelection();
+      this.actions.changeSelectableAll(false);
+
+      this._els.addIconButton.classList.remove(this.iconType);
+
+      this._els.addIconButton.classList.add(iconType);
+
+      this.actions.addIcon(iconType, iconColor);
+      this.iconType = iconType;
+       */
+    }
     /**
      * Make submenu dom element
      * @param {Locale} locale - translate text
@@ -42997,6 +43012,13 @@ var Shape = /*#__PURE__*/function (_Submenu) {
     key: "changeStartMode",
     value: function changeStartMode() {
       this.actions.stopDrawingMode();
+      this.changeStandbyMode();
+      this.type = 'rect';
+      event.currentTarget.classList.add(this.type);
+      this.actions.setDrawingShape(this.type, this.options);
+      this.actions.changeSelectableAll(false);
+      this._els.shapeSelectButton.classList.add('rect');
+      this.actions.modeChange('shape');
     }
     /**
      * Returns the menu to its default state.
@@ -43070,6 +43092,7 @@ var Shape = /*#__PURE__*/function (_Submenu) {
 
         if (this.type === shapeType) {
           this.changeStandbyMode();
+          this.actions.stopDrawingMode('SHAPE');
           return;
         }
 
@@ -43095,6 +43118,7 @@ var Shape = /*#__PURE__*/function (_Submenu) {
         strokeWidth: value
       }, !isLast);
       this.actions.setDrawingShape(this.type, this.options);
+      this.actions.stopDrawingMode('SHAPE-RESTART', this.options);
     }
     /**
      * Change shape color
@@ -43110,6 +43134,7 @@ var Shape = /*#__PURE__*/function (_Submenu) {
       this.actions.changeShape({
         fill: color
       });
+      this.actions.stopDrawingMode('SHAPE-RESTART', this.options);
     }
     /**
      * Change shape stroke color
@@ -43125,6 +43150,7 @@ var Shape = /*#__PURE__*/function (_Submenu) {
       this.actions.changeShape({
         stroke: color
       });
+      this.actions.stopDrawingMode('SHAPE-RESTART', this.options);
     }
   }]);
 
@@ -43830,7 +43856,7 @@ var Flip = /*#__PURE__*/function (_Submenu) {
 
   var locale = _ref.locale,
       makeSvgIcon = _ref.makeSvgIcon;
-  return concat_default()(_context = concat_default()(_context2 = "\n    <ul class=\"tui-image-editor-submenu-item\">\n        <li class=\"tie-rotate-button\">\n            <div class=\"tui-image-editor-button clockwise\">\n                <div>\n                    ".concat(makeSvgIcon(['normal', 'active'], 'rotate-clockwise', true), "\n                </div>\n                <label> 30 </label>\n            </div>\n            <div class=\"tui-image-editor-button counterclockwise\">\n                <div>\n                    ")).call(_context2, makeSvgIcon(['normal', 'active'], 'rotate-counterclockwise', true), "\n                </div>\n                <label> -30 </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition only-left-right\">\n            <div></div>\n        </li>\n        <li class=\"tui-image-editor-newline tui-image-editor-range-wrap\">\n            <label class=\"range\">")).call(_context, locale.localize('Range'), "</label>\n            <div class=\"tie-rotate-range\"></div>\n            <input class=\"tie-rotate-range-value tui-image-editor-range-value\" value=\"0\" />\n        </li>\n    </ul>\n");
+  return concat_default()(_context = concat_default()(_context2 = "\n    <ul class=\"tui-image-editor-submenu-item\">\n        <li class=\"tie-rotate-button\">\n            <div class=\"tui-image-editor-button clockwise\">\n                <div>\n                    ".concat(makeSvgIcon(['normal', 'active'], 'rotate-clockwise', true), "\n                </div>\n                <label> 90 </label>\n            </div>\n            <div class=\"tui-image-editor-button counterclockwise\">\n                <div>\n                    ")).call(_context2, makeSvgIcon(['normal', 'active'], 'rotate-counterclockwise', true), "\n                </div>\n                <label> -90 </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition only-left-right\">\n            <div></div>\n        </li>\n        <li class=\"tui-image-editor-newline tui-image-editor-range-wrap\">\n            <label class=\"range\">")).call(_context, locale.localize('Range'), "</label>\n            <div class=\"tie-rotate-range\"></div>\n            <input class=\"tie-rotate-range-value tui-image-editor-range-value\" value=\"0\" />\n        </li>\n    </ul>\n");
 });
 ;// CONCATENATED MODULE: ./src/js/ui/rotate.js
 
@@ -43851,8 +43877,8 @@ function rotate_isNativeReflectConstruct() { if (typeof Reflect === "undefined" 
 
 
 
-var CLOCKWISE = 30;
-var COUNTERCLOCKWISE = -30;
+var CLOCKWISE = 90;
+var COUNTERCLOCKWISE = -90;
 /**
  * Rotate ui class
  * @class
@@ -44545,7 +44571,7 @@ var Mask = /*#__PURE__*/function (_Submenu) {
 
   var locale = _ref.locale,
       makeSvgIcon = _ref.makeSvgIcon;
-  return concat_default()(_context = concat_default()(_context2 = concat_default()(_context3 = concat_default()(_context4 = concat_default()(_context5 = concat_default()(_context6 = concat_default()(_context7 = concat_default()(_context8 = concat_default()(_context9 = concat_default()(_context10 = concat_default()(_context11 = concat_default()(_context12 = concat_default()(_context13 = concat_default()(_context14 = concat_default()(_context15 = concat_default()(_context16 = concat_default()(_context17 = concat_default()(_context18 = concat_default()(_context19 = concat_default()(_context20 = "\n    <ul class=\"tui-image-editor-submenu-item\">\n        <li class=\"tie-icon-add-button\">\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-arrow\">\n                <div>\n                    ".concat(makeSvgIcon(['normal', 'active'], 'icon-arrow', true), "\n                </div>\n                <label>\n                    ")).call(_context20, locale.localize('Arrow'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-arrow-2\">\n                <div>\n                    ")).call(_context19, makeSvgIcon(['normal', 'active'], 'icon-arrow-2', true), "\n                </div>\n                <label>\n                    ")).call(_context18, locale.localize('Arrow-2'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-arrow-3\">\n                <div>\n                    ")).call(_context17, makeSvgIcon(['normal', 'active'], 'icon-arrow-3', true), "\n                </div>\n                <label>\n                    ")).call(_context16, locale.localize('Arrow-3'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-star\">\n                <div>\n                    ")).call(_context15, makeSvgIcon(['normal', 'active'], 'icon-star', true), "\n                </div>\n                <label>\n                    ")).call(_context14, locale.localize('Star-1'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-star-2\">\n                <div>\n                    ")).call(_context13, makeSvgIcon(['normal', 'active'], 'icon-star-2', true), "\n                </div>\n                <label>\n                    ")).call(_context12, locale.localize('Star-2'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-polygon\">\n                <div>\n                    ")).call(_context11, makeSvgIcon(['normal', 'active'], 'icon-polygon', true), "\n                </div>\n                <label>\n                    ")).call(_context10, locale.localize('Polygon'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-location\">\n                <div>\n                    ")).call(_context9, makeSvgIcon(['normal', 'active'], 'icon-location', true), "\n                </div>\n                <label>\n                    ")).call(_context8, locale.localize('Location'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-heart\">\n                <div>\n                    ")).call(_context7, makeSvgIcon(['normal', 'active'], 'icon-heart', true), "\n                </div>\n                <label>\n                    ")).call(_context6, locale.localize('Heart'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-bubble\">\n                <div>\n                    ")).call(_context5, makeSvgIcon(['normal', 'active'], 'icon-bubble', true), "\n                </div>\n                <label>\n                    ")).call(_context4, locale.localize('Bubble'), "\n                </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition\">\n            <div></div>\n        </li>\n        <li class=\"tie-icon-add-button\">\n            <div class=\"tui-image-editor-button\" style=\"margin:0\">\n                <div>\n                    <input type=\"file\" accept=\"image/*\" class=\"tie-icon-image-file\">\n                    ")).call(_context3, makeSvgIcon(['normal', 'active'], 'icon-load', true), "\n                </div>\n                <label>\n                    ")).call(_context2, locale.localize('Custom icon'), "\n                </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition\">\n            <div></div>\n        </li>\n        <li>\n            <div class=\"tie-icon-color\" title=\"")).call(_context, locale.localize('Color'), "\"></div>\n        </li>\n    </ul>\n");
+  return concat_default()(_context = concat_default()(_context2 = concat_default()(_context3 = concat_default()(_context4 = concat_default()(_context5 = concat_default()(_context6 = concat_default()(_context7 = concat_default()(_context8 = concat_default()(_context9 = concat_default()(_context10 = concat_default()(_context11 = concat_default()(_context12 = concat_default()(_context13 = concat_default()(_context14 = concat_default()(_context15 = concat_default()(_context16 = concat_default()(_context17 = concat_default()(_context18 = concat_default()(_context19 = concat_default()(_context20 = "\n    <ul class=\"tui-image-editor-submenu-item\">\n        <li class=\"tie-icon-add-button\">\n            <div class=\"tui-image-editor-button rectfill\" data-icontype=\"icon-arrow\">\n                <div>\n                    ".concat(makeSvgIcon(['normal', 'active'], 'shape-rectanglefill', true), "\n                </div>\n                <label>\n                    ")).call(_context20, locale.localize('Arrow'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button circlefill\" data-icontype=\"icon-arrow-2\">\n                <div>\n                    ")).call(_context19, makeSvgIcon(['normal', 'active'], 'shape-circlefill', true), "\n                </div>\n                <label>\n                    ")).call(_context18, locale.localize('Arrow-2'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button trianglefill\" data-icontype=\"icon-arrow-3\">\n                <div>\n                    ")).call(_context17, makeSvgIcon(['normal', 'active'], 'shape-trianglefill', true), "\n                </div>\n                <label>\n                    ")).call(_context16, locale.localize('Arrow-3'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-star\" style='display:none'>\n                <div>\n                    ")).call(_context15, makeSvgIcon(['normal', 'active'], 'icon-star', true), "\n                </div>\n                <label>\n                    ")).call(_context14, locale.localize('Star-1'), "\n                </label>\n            </div>\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-star-2\" style='display:none'>\n                <div>\n                    ")).call(_context13, makeSvgIcon(['normal', 'active'], 'icon-star-2', true), "\n                </div>\n                <label>\n                    ")).call(_context12, locale.localize('Star-2'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-polygon\" style='display:none'>\n                <div>\n                    ")).call(_context11, makeSvgIcon(['normal', 'active'], 'icon-polygon', true), "\n                </div>\n                <label>\n                    ")).call(_context10, locale.localize('Polygon'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-location\" style='display:none'>\n                <div>\n                    ")).call(_context9, makeSvgIcon(['normal', 'active'], 'icon-location', true), "\n                </div>\n                <label>\n                    ")).call(_context8, locale.localize('Location'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-heart\" style='display:none'>\n                <div>\n                    ")).call(_context7, makeSvgIcon(['normal', 'active'], 'icon-heart', true), "\n                </div>\n                <label>\n                    ")).call(_context6, locale.localize('Heart'), "\n                </label>\n            </div>\n\n            <div class=\"tui-image-editor-button\" data-icontype=\"icon-bubble\" style='display:none'>\n                <div>\n                    ")).call(_context5, makeSvgIcon(['normal', 'active'], 'icon-bubble', true), "\n                </div>\n                <label>\n                    ")).call(_context4, locale.localize('Bubble'), "\n                </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition\" style='display:none'>\n            <div></div>\n        </li>\n        <li class=\"tie-icon-add-button\" style='display:none'>\n            <div class=\"tui-image-editor-button\" style=\"margin:0\">\n                <div>\n                    <input type=\"file\" accept=\"image/*\" class=\"tie-icon-image-file\">\n                    ")).call(_context3, makeSvgIcon(['normal', 'active'], 'icon-load', true), "\n                </div>\n                <label>\n                    ")).call(_context2, locale.localize('Custom icon'), "\n                </label>\n            </div>\n        </li>\n        <li class=\"tui-image-editor-partition\">\n            <div></div>\n        </li>\n        <li>\n            <div class=\"tie-icon-color\" title=\"")).call(_context, locale.localize('Color'), "\"></div>\n        </li>\n    </ul>\n");
 });
 ;// CONCATENATED MODULE: ./src/js/ui/icon.js
 
@@ -44604,7 +44630,7 @@ var Icon = /*#__PURE__*/function (_Submenu) {
       registerIconButton: _this.selector('.tie-icon-image-file'),
       addIconButton: _this.selector('.tie-icon-add-button'),
       iconColorpicker: new colorpicker(_this.selector('.tie-icon-color'), {
-        defaultColor: '#ffbb3b',
+        defaultColor: '#000000',
         toggleDirection: _this.toggleDirection,
         usageStatistics: _this.usageStatistics
       })
@@ -44755,7 +44781,7 @@ var Icon = /*#__PURE__*/function (_Submenu) {
         this._els.addIconButton.classList.add(iconType);
 
         if (this.iconType === iconType) {
-          this.changeStandbyMode();
+          //this.changeStandbyMode();
         } else {
           this.actions.addIcon(iconType, iconColor);
           this.iconType = iconType;
@@ -49301,11 +49327,11 @@ var ImageTracer = /*#__PURE__*/function () {
         var _context3;
 
         if (obj.type === 'icon') {
-          _this12.ui.icon.changeStandbyMode();
+          //_this12.ui.icon.changeStandbyMode();
         } else if (index_of_default()(_context3 = ['rect', 'circle', 'triangle']).call(_context3, obj.type) > -1) {
           _this12.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
 
-          _this12.ui.shape.changeStandbyMode();
+          //_this12.ui.shape.changeStandbyMode();
         }
       },
       objectScaled: function objectScaled(obj) {
@@ -54009,7 +54035,9 @@ var shape_Shape = /*#__PURE__*/function (_Component) {
   }, {
     key: "setStates",
     value: function setStates(type, options) {
-      this._type = type;
+      if (type) {
+        this._type = type;
+      }
 
       if (options) {
         this._options = (0,external_commonjs_tui_code_snippet_commonjs2_tui_code_snippet_amd_tui_code_snippet_root_tui_util_.extend)(this._options, options);
@@ -56661,6 +56689,14 @@ var Graphics = /*#__PURE__*/function () {
       var drawingModeInstance = this._getDrawingModeInstance(mode);
 
       if (drawingModeInstance && drawingModeInstance.start) {
+        if (drawingModeInstance.name !== 'SHAPE') {
+          var shapeDrawingInstance = this._getDrawingModeInstance('SHAPE');
+          shapeDrawingInstance.end(this);
+        }
+        if (drawingModeInstance.name !== 'ICON') {
+          var iconDrawingInstance = this._getDrawingModeInstance('ICON');
+          iconDrawingInstance.end(this);
+        }
         drawingModeInstance.start(this, option);
         this._drawingMode = mode;
       }
@@ -56673,14 +56709,28 @@ var Graphics = /*#__PURE__*/function () {
 
   }, {
     key: "stopDrawingMode",
-    value: function stopDrawingMode() {
+    value: function stopDrawingMode(mode='', option) {
+      if (mode === 'SHAPE') {
+        var shapeDrawingModeInstance = this._getDrawingModeInstance(mode);
+        shapeDrawingModeInstance.end(this);
+        this._drawingMode = drawingModes.NORMAL;
+      }
+
+      if (mode === 'SHAPE-RESTART') {
+        var shapeDrawingModeInstance = this._getDrawingModeInstance('SHAPE');
+        this.setDrawingShape(null, option);
+        shapeDrawingModeInstance.end(this);
+        shapeDrawingModeInstance.start(this, option);
+        this._drawingMode = drawingModes.SHAPE;
+      }
+
       if (this._isSameDrawingMode(drawingModes.NORMAL)) {
         return;
       }
 
       var drawingModeInstance = this._getDrawingModeInstance(this.getDrawingMode());
 
-      if (drawingModeInstance && drawingModeInstance.end) {
+      if (drawingModeInstance && drawingModeInstance.end && drawingModeInstance.name !== 'SHAPE' && drawingModeInstance.name !== 'ICON') {
         drawingModeInstance.end(this);
       }
 
@@ -58870,8 +58920,8 @@ var ImageEditor = /*#__PURE__*/function () {
 
   }, {
     key: "stopDrawingMode",
-    value: function stopDrawingMode() {
-      this._graphics.stopDrawingMode();
+    value: function stopDrawingMode(mode='', option) {
+      this._graphics.stopDrawingMode(mode, option);
     }
     /**
      * Crop this image with rect
